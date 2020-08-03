@@ -15,7 +15,6 @@ jobs:
     - name: Update SVG
       run: ./stats.ps1 $Env:USERNAME $Env:TOKEN image
       shell: pwsh
-      working-directory: $GITHUB_WORKSPACE
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.TOKEN }}
