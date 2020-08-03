@@ -13,8 +13,9 @@ jobs:
     - uses: actions/checkout@v2
       
     - name: Update SVG
-      run: ./stats.ps1 $Env:USERNAME $Env:TOKEN .
+      run: ./stats.ps1 $Env:USERNAME $Env:TOKEN image
       shell: pwsh
+      working-directory: ./
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.TOKEN }}
