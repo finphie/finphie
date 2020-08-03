@@ -15,13 +15,14 @@ jobs:
     - name: Update SVG
       run: ./stats.ps1 $Env:USERNAME $Env:TOKEN image
       shell: pwsh
-      working-directory: $Env:GITHUB_WORKSPACE
+      working-directory: $GITHUB_WORKSPACE
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.TOKEN }}
     
     - name: Commit and push if SVG changed
       run: |
+        ls
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions"
         git diff --quiet || (git add . && git commit -m "Updated SVG")
