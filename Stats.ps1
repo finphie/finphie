@@ -46,11 +46,11 @@ function Get-GitHubStats
     $response = Invoke-RestMethod -Uri $uri -Method Post -Headers $headers -Body $body -ContentType 'application/json'
 
     $languages = $response.Data.User.Repositories.Nodes |
-    ForEach-Object { $_.Languages.Edges } |
-    Select-Object * -ExcludeProperty Node -ExpandProperty Node |
-    Group-Object Name |
-    Select-Object Name, @{Name='Color'; Expression={($_.Group | Select-Object Color -First 1).Color}}, @{Name='Size'; Expression={($_.Group | Measure-Object Size -Sum).Sum}} |
-    Sort-Object Size -Descending
+        ForEach-Object { $_.Languages.Edges } |
+        Select-Object * -ExcludeProperty Node -ExpandProperty Node |
+        Group-Object Name |
+        Select-Object Name, @{Name='Color'; Expression={($_.Group | Select-Object Color -First 1).Color}}, @{Name='Size'; Expression={($_.Group | Measure-Object Size -Sum).Sum}} |
+        Sort-Object Size -Descending
 
     return $languages
 }
