@@ -21,8 +21,8 @@ jobs:
     
     - name: Commit and push if SVG changed
       run: |
-        ls
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions"
-        git diff --quiet || (git add . && git commit -m "Updated SVG")
+        git add .
+        git commit -m "Updated SVG"
         git push
