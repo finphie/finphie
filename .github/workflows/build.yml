@@ -13,12 +13,12 @@ jobs:
     - uses: actions/checkout@v2
       
     - name: Update SVG
-      run: ./stats.ps1 $Env:USERNAME $Env:TOKEN $Env:WORKSPACE
+      run: ./stats.ps1 $Env:USERNAME $Env:TOKEN image
       shell: pwsh
+      working-directory: $Env:GITHUB_WORKSPACE
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.TOKEN }}
-        WORKSPACE: ${{ join($GITHUB_WORKSPACE, 'image', '/') }}
     
     - name: Commit and push if SVG changed
       run: |
