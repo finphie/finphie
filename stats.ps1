@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory)]
     [string]$login,
     [Parameter(Mandatory)]
-    [string]$token
+    [string]$token,
+    [string]$path = '.'
 )
 
 function Get-GitHubStats
@@ -105,10 +106,10 @@ try {
     exit -1
 }
 
-$path = 'image'
 if (!(Test-Path $path))
 {
     New-Item $path -ItemType Directory | Out-Null
 }
 
-New-Svg $json | Out-File -FilePath "$path/language.svg" -NoNewLine
+$file = Join-Path $path language.svg
+New-Svg $json | Out-File -FilePath $file -NoNewLine
