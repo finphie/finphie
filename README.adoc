@@ -1,3 +1,0 @@
-== Most Used Languages
-
-image::https://raw.githubusercontent.com/finphie/finphie/master/image/language.svg[width=300]
