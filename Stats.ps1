@@ -20,39 +20,60 @@ function Get-GitHubStats
     $headers = @{
         'Authorization' = "bearer $token"
     }
-    $body = @"
-    {
-        "query":
-            "query {
-                user(login: \"$login\") {
-                    repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
-                        nodes {
-                            languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
-                                edges {
-                                    size
-                                    node {
-                                        name
-                                        color
+
+    $after = 'null'
+    $languages = [System.Collections.ArrayList]@()
+    $count = 0
+    $maxCount = 10
+
+    do {
+        $body = @"
+        {
+            "query":
+                "query {
+                    user(login: \"$login\") {
+                        repositories(ownerAffiliations: OWNER, isFork: false, first: 100, after: $after) {
+                            pageInfo {
+                                hasNextPage
+                                endCursor
+                            }
+                            nodes {
+                                languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+                                    edges {
+                                        size
+                                        node {
+                                            name
+                                            color
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
-            }"
-    }
+                }"
+        }
 "@.Replace(' ', '').Replace("`r", '').Replace("`n", ' ')
 
-    $response = Invoke-RestMethod -Uri $uri -Method Post -Headers $headers -Body $body -ContentType 'application/json'
+        $response = Invoke-RestMethod -Uri $uri -Method Post -Headers $headers -Body $body -ContentType 'application/json'
 
-    $languages = $response.Data.User.Repositories.Nodes |
-        ForEach-Object { $_.Languages.Edges } |
-        Select-Object * -ExcludeProperty Node -ExpandProperty Node |
+        $hasNextPage = $response.Data.User.Repositories.PageInfo.HasNextPage
+        $after = "\`"$($response.Data.User.Repositories.PageInfo.EndCursor)\`""
+
+        $language = $response.Data.User.Repositories.Nodes |
+            ForEach-Object { $_.Languages.Edges } |
+            Select-Object * -ExcludeProperty Node -ExpandProperty Node
+
+        $languages.AddRange($language)
+    } while ($hasNextPage -And ($count++ -lt $maxCount))
+
+    $result = $languages |
         Group-Object Name |
         Select-Object Name, @{Name='Color'; Expression={($_.Group | Select-Object Color -First 1).Color}}, @{Name='Size'; Expression={($_.Group | Measure-Object Size -Sum).Sum}} |
         Sort-Object Size -Descending
 
-    return $languages
+    Write-Host "languages: $($result.Count)"
+
+    return $result
 }
 
 function New-Svg
