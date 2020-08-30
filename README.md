@@ -4,4 +4,4 @@
 
 ## Most Used Languages
 
-<img width="300" src="https://raw.githubusercontent.com/finphie/finphie/master/image/language.svg"/>
+<img width="300" src="https://raw.githubusercontent.com/finphie/finphie/main/image/language.svg"/>
