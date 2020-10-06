@@ -65,8 +65,12 @@ foreach ($line in $lines) {
     }
 }
 
+Write-Output('[ignore files]')
 foreach ($ignoreFile in $ignoreFiles) {
-    Join-Path $targetRepository $ignoreFile | Remove-Item -ErrorAction SilentlyContinue
+    $targetPath = Join-Path $targetRepository $ignoreFile
+
+    Write-Host "[-] $targetPath" -ForegroundColor Red
+    Remove-Item $targetPath -ErrorAction SilentlyContinue
 }
 
 [string]$newHash = Invoke-Expression "git -C $configRepository rev-parse HEAD"
