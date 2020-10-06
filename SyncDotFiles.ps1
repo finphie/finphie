@@ -29,10 +29,6 @@ Write-Output $hash
 $lines = Invoke-Expression "git -C $configRepository diff $hash --name-status"
 Write-Output $lines
 
-foreach ($ignoreFile in $ignoreFiles) {
-    Join-Path $targetRepository $ignoreFile | Remove-Item -ErrorAction SilentlyContinue
-}
-
 foreach ($line in $lines) {
     $x = $line -split '\t'
 
@@ -67,6 +63,10 @@ foreach ($line in $lines) {
     else {
         exit -1
     }
+}
+
+foreach ($ignoreFile in $ignoreFiles) {
+    Join-Path $targetRepository $ignoreFile | Remove-Item -ErrorAction SilentlyContinue
 }
 
 [string]$newHash = Invoke-Expression "git -C $configRepository rev-parse HEAD"
