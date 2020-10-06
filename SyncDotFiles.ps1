@@ -29,15 +29,14 @@ Write-Output $hash
 $lines = Invoke-Expression "git -C $configRepository diff $hash --name-status"
 Write-Output $lines
 
-$ignoreTable = New-Object System.Collections.Generic.HashSet[string] (,[string[]]$ignoreFiles)
+foreach ($ignoreFile in $ignoreFiles) {
+    Join-Path $targetRepository $ignoreFile | Remove-Item -ErrorAction SilentlyContinue
+}
 
 foreach ($line in $lines) {
     $x = $line -split '\t'
 
-    if ($ignoreTable.Contains($x[1])) {
-        Remove-Item $x[1] -ErrorAction SilentlyContinue
-    }
-    elseif ($x[0] -eq 'M' -or $x[0] -eq 'A') {
+    if ($x[0] -eq 'M' -or $x[0] -eq 'A') {
         $path = Join-Path $configRepository $x[1]
         $targetPath = Join-Path $targetRepository $x[1]
         $targetParentPath = Split-Path $targetPath -Parent
