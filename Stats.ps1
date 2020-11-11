@@ -70,8 +70,7 @@ function Get-GitHubStats
         Group-Object Name |
         Select-Object Name, @{Name='Color'; Expression={($_.Group | Select-Object Color -First 1).Color}}, @{Name='Size'; Expression={($_.Group | Measure-Object Size -Sum).Sum}} |
         Sort-Object Size -Descending
-
-    Write-OutPut "languages: $($result.Count)"
+    Write-Information "languages: $($result.Count)" -InformationAction Continue
 
     return $result
 }
