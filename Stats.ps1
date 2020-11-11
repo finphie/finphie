@@ -71,12 +71,12 @@ function Get-GitHubStats
         Select-Object Name, @{Name='Color'; Expression={($_.Group | Select-Object Color -First 1).Color}}, @{Name='Size'; Expression={($_.Group | Measure-Object Size -Sum).Sum}} |
         Sort-Object Size -Descending
 
-    Write-Host "languages: $($result.Count)"
+    Write-OutPut "languages: $($result.Count)"
 
     return $result
 }
 
-function New-Svg
+function ConvertTo-Svg
 {
     [CmdletBinding()]
     param (
@@ -133,4 +133,4 @@ if (!(Test-Path $path))
 }
 
 $file = Join-Path $path language.svg
-New-Svg $json | Out-File -FilePath $file -NoNewLine
+ConvertTo-Svg $json | Out-File -FilePath $file -NoNewLine

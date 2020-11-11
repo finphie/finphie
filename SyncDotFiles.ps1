@@ -1,3 +1,4 @@
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '')]
 param (
     [Parameter(Mandatory)]
     [string]$targetRepository,
@@ -10,7 +11,7 @@ function Get-EmptyHash {
     [CmdletBinding()]
     param ()
 
-    return Invoke-Expression 'git hash-object -t tree /dev/null'
+    return git hash-object -t tree /dev/null
 }
 
 [hashtable]$json = @{}
@@ -26,7 +27,7 @@ else {
 }
 
 Write-Output $hash
-$lines = Invoke-Expression "git -C $configRepository diff $hash --name-status"
+$lines = git -C $configRepository diff $hash --name-status
 Write-Output $lines
 
 foreach ($line in $lines) {
@@ -73,6 +74,6 @@ foreach ($ignoreFile in $ignoreFiles) {
     Remove-Item $targetPath -ErrorAction SilentlyContinue
 }
 
-[string]$newHash = Invoke-Expression "git -C $configRepository rev-parse HEAD"
+[string]$newHash = git -C $configRepository rev-parse HEAD
 $json['hash'] = $newHash
 $json | ConvertTo-Json | Out-File $configFilePath -NoNewline
