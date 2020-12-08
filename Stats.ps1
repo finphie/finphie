@@ -86,9 +86,12 @@ function ConvertTo-Svg
     $totalSize = ($languages | Measure-Object Size -Sum).Sum
     $progressWidth = 200
     $progressHeight = 8
+    $darkModeBackgroundColor = '#0d1117'
     $progressColor = '#e1e4e8'
+    $darkModeprogressColor = '#21262d'
     $fontSize = 12
     $fontColor = '#586069'
+    $darkModeFontColor = '#8b949e'
     $topMargin = 10
     $leftMargin = 20
     $topPadding = 5
@@ -96,7 +99,18 @@ function ConvertTo-Svg
     $width = 300
     $height = $languages.Length * ($fontSize + $topPadding + $progressHeight + $topMargin) + 15
 
-    $svg = "<svg xmlns=`"http://www.w3.org/2000/svg`" viewBox=`"0 0 $width $height`">"
+    $svg = @"
+<svg xmlns=`"http://www.w3.org/2000/svg`" viewBox=`"0 0 $width $height`">
+<style>
+text{fill:$fontColor}
+path{fill:$progressColor}
+@media(prefers-color-scheme:dark){
+svg{background-color:$darkModeBackgroundColor}
+text{fill:$darkModeFontColor}
+path{fill:$darkModeprogressColor}
+}
+</style>
+"@
     $y = $topMargin + $fontSize
 
     foreach ($language in $languages) {
@@ -104,10 +118,10 @@ function ConvertTo-Svg
         $languageWidth = [Math]::Ceiling($progressWidth * $percentage)
 
         $svg += @"
-<text x="$leftMargin" y="$y" font-size="$fontSize" fill="$fontColor">$($language.Name)</text>
-<text x="$($progressWidth + $leftMargin + $leftPadding)" y="$($y + $fontSize + 2)" font-size="$fontSize" fill="$fontColor">$($percentage.ToString("0.00%"))</text>
-<path fill="$progressColor" d="M$leftMargin $($y + $topPadding)h${progressWidth}v${progressHeight}H$leftMargin"/>
-<path fill="$($language.Color)" d="M$leftMargin $($y + $topPadding)h${languageWidth}v${progressHeight}H$leftMargin"/>
+<text x="$leftMargin" y="$y" font-size="$fontSize">$($language.Name)</text>
+<text x="$($progressWidth + $leftMargin + $leftPadding)" y="$($y + $fontSize + 2)" font-size="$fontSize">$($percentage.ToString("0.00%"))</text>
+<path d="M$leftMargin $($y + $topPadding)h${progressWidth}v${progressHeight}H$leftMargin"/>
+<path style="fill:$($language.Color)" d="M$leftMargin $($y + $topPadding)h${languageWidth}v${progressHeight}H$leftMargin"/>
 "@
 
         $y += $topMargin + $fontSize + $progressHeight
