@@ -102,13 +102,18 @@ function ConvertTo-Svg
     $svg = @"
 <svg xmlns=`"http://www.w3.org/2000/svg`" viewBox=`"0 0 $width $height`">
 <style>
-text{fill:$fontColor}
-path{fill:$progressColor}
-@media(prefers-color-scheme:dark){
-svg{background-color:$darkModeBackgroundColor}
-text{fill:$darkModeFontColor}
-path{fill:$darkModeprogressColor}
+:root{
+--b:$fontColor;
+--c:$progressColor
 }
+[data-color-mode=dark]{
+--a:$darkModeBackgroundColor;
+--b:$darkModeFontColor;
+--c:$darkModeprogressColor
+}
+svg{background-color:var(--a)}
+text{fill:var(--b)}
+path{fill:var(--c)}
 </style>
 "@
     $y = $topMargin + $fontSize
