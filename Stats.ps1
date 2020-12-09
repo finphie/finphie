@@ -97,7 +97,7 @@ function ConvertTo-Svg
     $topPadding = 5
     $leftPadding = 10
     $width = 300
-    $height = $languages.Length * ($fontSize + $topPadding + $progressHeight + $topMargin) + 15
+    $height = $languages.Length * ($fontSize + $progressHeight + $topMargin) + $topPadding + $fontSize
 
     $svg = @"
 <svg xmlns=`"http://www.w3.org/2000/svg`" viewBox=`"0 0 $width $height`">
