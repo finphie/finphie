@@ -1,7 +1,6 @@
-# @finphie
+## Repositories
 
-![Build Status](https://github.com/finphie/finphie/workflows/build/badge.svg)
-
-## Most Used Languages
-
-<img width="300" src="https://raw.githubusercontent.com/finphie/finphie/main/image/language.svg"/>
+- [Actions](https://github.com/finphie/Actions)  
+GitHub Actions関連ファイルの管理と、各種設定の同期を行うリポジトリです。
+- [dotfiles](https://github.com/finphie/dotfiles)  
+設定ファイルなどを管理するテンプレートリポジトリです。
